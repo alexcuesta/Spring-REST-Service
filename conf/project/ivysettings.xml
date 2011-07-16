@@ -1,0 +1,14 @@
+<ivysettings>
+
+    <properties file="versions.properties" override="false" />
+
+    <settings defaultResolver="default" />
+    
+    <resolvers m2compatible="true" changingPattern=".*-SNAPSHOT" checkmodified="true">
+        <chain name="default" returnFirst="true">        
+            <ibiblio name="external" m2compatible="true" pattern="[organization]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]" />
+        </chain>
+    </resolvers>
+
+</ivysettings>
+

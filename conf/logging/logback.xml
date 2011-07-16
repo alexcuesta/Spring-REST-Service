@@ -1,0 +1,21 @@
+<configuration scan="true" scanPeriod="10 seconds">
+
+    <contextName>spring-challenge</contextName>
+
+    <property name="log.home" value="${java.io.tmpdir}" />
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%contextName] %-5level %logger{36} [%L] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="uk.co.pc" level="${uk.co.pc.log.level:-debug}" additivity="false">
+        <appender-ref ref="${uk.co.pc.appender.ref:-console}" />
+    </logger>
+
+    <root level="${root.log.level:-off}">
+        <appender-ref ref="${root.appender.ref:-console}" />
+    </root>
+
+</configuration>

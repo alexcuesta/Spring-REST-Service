@@ -1,0 +1,39 @@
+<!DOCTYPE project>
+<project name="paths" basedir=".">
+
+    <property name="src.dir" value="src" />
+    <property name="java.src.dir" value="${src.dir}/main/java" />
+    <property name="test.src.dir" value="${src.dir}/test/java" />
+
+    <property name="conf.dir" value="conf" />
+    <property name="project.conf.dir" value="${conf.dir}/project" />
+    <property name="libs.dir" value="libs" />
+
+    <property name="web.dir" value="web" />
+    <property name="tmp.dir" value="tmp" />
+    <property name="dist.tmp.dir" value="${tmp.dir}/dist" />
+    <property name="build.tmp.dir" value="${tmp.dir}/build" />
+    <property name="reports.tmp.dir" value="${tmp.dir}/reports" />
+
+    <path id="build.classpath">
+        <fileset id="build.classpath.jars" dir="${libs.dir}">
+            <include name="compile/*.jar" />
+            <include name="default/*.jar" />
+            <include name="runtime/*.jar" />
+            <include name="test/*.jar" />
+        </fileset>
+    </path>
+
+    <path id="build.all.classpath">
+        <path refid="build.classpath" />
+        <path refid="build.support.classpath" />
+    </path>
+
+    <path id="test.classpath">
+        <path refid="build.classpath" />
+        <pathelement location="${build.tmp.dir}" />
+        <pathelement location="${conf.dir}/logging" />
+        <pathelement location="${conf.dir}/spring" />
+    </path>
+
+</project>

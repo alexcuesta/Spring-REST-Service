@@ -1,0 +1,109 @@
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:m="http://ant.apache.org/ivy/maven" xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
+
+    <info organisation="${organisation}" module="${ant.project.name}" revision="${module.version}" />
+
+    <configurations>
+        <conf name="default" />
+        <conf name="runtime" extends="default" />
+        <conf name="compile" />
+        <conf name="sources" />
+        <conf name="javadoc" />
+        <conf name="test" visibility="private" />
+    </configurations>
+
+    <publications>
+        <artifact name="${ant.project.name}" type="jar" conf="runtime" />
+        <artifact name="${ant.project.name}-source" type="source" ext="jar" conf="sources" />
+        <artifact name="${ant.project.name}-javadoc" type="javadoc" ext="jar" conf="javadoc" />
+    </publications>
+
+    <dependencies>
+
+        <!-- AOPALLIANCE -->
+        <dependency org="aopalliance" name="aopalliance" rev="${aop.alliance.version}" conf="runtime->default" />
+
+        <!-- ASM -->
+        <dependency org="asm" name="asm" rev="${asm.version}" conf="runtime->default" />
+        <dependency org="asm" name="asm-tree" rev="${asm.version}" conf="runtime->default" />
+
+        <!-- ASPECTJ -->
+        <dependency org="org.aspectj" name="aspectjtools" rev="${aspectj.version}" conf="runtime->default" />
+
+        <!-- COMMONS LIBRARIES -->
+        <dependency org="commons-lang" name="commons-lang" rev="${commons.lang.version}" conf="runtime->default" />
+        <dependency org="commons-io" name="commons-io" rev="${commons.io.version}" conf="runtime->default" />
+        <dependency org="commons-beanutils" name="commons-beanutils" rev="${commons.beanutils.version}" conf="runtime->default" />
+        <dependency org="commons-collections" name="commons-collections" rev="${commons.collections.version}" conf="runtime->default" />
+        <dependency org="commons-digester" name="commons-digester" rev="${commons.digester.version}" conf="runtime->default" />
+
+        <!-- SLF4J -->
+        <dependency org="org.slf4j" name="slf4j-api" rev="${slf4j.version}" conf="runtime->default" />
+
+        <!-- JAVASSIST -->
+        <dependency org="org.javassist" name="javassist" rev="${javassist.version}" conf="runtime->default" />
+
+        <!-- GOOGLE GUAVA -->
+        <dependency org="com.google.guava" name="guava" rev="${guava.version}" conf="runtime->default" />
+
+        <!-- LOGBACK -->
+        <dependency org="ch.qos.logback" name="logback-core" rev="${logback.version}" conf="runtime->default" />
+        <dependency org="ch.qos.logback" name="logback-classic" rev="${logback.version}" conf="runtime->default" />
+
+        <!-- COMMONS-LOGGING TO SLF4J BRIDGE -->
+        <dependency org="org.slf4j" name="jcl-over-slf4j" rev="${slf4j.version}" conf="runtime->default" />
+
+        <!-- SPRING -->
+        <dependency org="org.springframework" name="spring-aop" rev="${spring.version}" conf="runtime->default" />
+        <dependency org="org.springframework" name="spring-asm" rev="${spring.version}" conf="runtime->default" />
+        <dependency org="org.springframework" name="spring-aspects" rev="${spring.version}" conf="runtime->default" />
+        <dependency org="org.springframework" name="spring-beans" rev="${spring.version}" conf="runtime->default" />
+        <dependency org="org.springframework" name="spring-context" rev="${spring.version}" conf="runtime->default" />
+        <dependency org="org.springframework" name="spring-context-support" rev="${spring.version}" conf="runtime->default" />
+        <dependency org="org.springframework" name="spring-core" rev="${spring.version}" conf="runtime->default" />
+        <dependency org="org.springframework" name="spring-expression" rev="${spring.version}" conf="runtime->default" />
+        <dependency org="org.springframework" name="spring-jdbc" rev="${spring.version}" conf="runtime->default" />
+        <dependency org="org.springframework" name="spring-orm" rev="${spring.version}" conf="runtime->default" />
+        <dependency org="org.springframework" name="spring-oxm" rev="${spring.version}" conf="runtime->default" />
+        <dependency org="org.springframework" name="spring-test" rev="${spring.version}" conf="runtime->default" />
+        <dependency org="org.springframework" name="spring-tx" rev="${spring.version}" conf="runtime->default" />
+        <dependency org="org.springframework" name="spring-web" rev="${spring.version}" conf="runtime->default" />
+        <dependency org="org.springframework" name="spring-webmvc" rev="${spring.version}" conf="runtime->default" />
+
+        <!-- JACKSON -->
+        <dependency org="org.codehaus.jackson" name="jackson-core-lgpl" rev="${jackson.version}" conf="runtime->default" />
+        <dependency org="org.codehaus.jackson" name="jackson-mapper-lgpl" rev="${jackson.version}" conf="runtime->default" />
+
+        <!-- BONECP (DATABASE POOLING) -->
+        <dependency org="com.jolbox" name="bonecp" rev="${bonecp.version}" conf="runtime->default" />
+
+        <!-- H2 DATABASE -->
+        <dependency org="com.h2database" name="h2" rev="${h2.version}" conf="runtime->default" />
+
+        <!-- HIBERNATE -->
+        <dependency org="org.hibernate" name="hibernate-core" rev="${hibernate.version}" conf="runtime->default" />
+        <dependency org="org.hibernate" name="hibernate-validator" rev="${hibernate.validator.version}" conf="runtime->default" />
+
+        <!-- CGLIB -->
+        <dependency org="cglib" name="cglib-nodep" rev="${cglib.version}" conf="runtime->default" />
+
+        <!-- TEST DEPENDENCIES -->
+        <dependency org="junit" name="junit-dep" rev="${junit.version}" conf="test->default" />
+        <dependency org="net.sourceforge.cobertura" name="cobertura" rev="${cobertura.version}" conf="test->default" />
+        <dependency org="org.hamcrest" name="hamcrest-library" rev="${hamcrest.version}" conf="test->default" />
+        <dependency org="org.mockito" name="mockito-all" rev="${mockito.version}" conf="test->default" />
+        <dependency org="org.slf4j" name="log4j-over-slf4j" rev="${slf4j.version}" conf="test->default" />
+
+        <!-- WE NEVER WANT THESE DEPENDENCIES -->
+        <exclude org="org.apache.ant" module="ant" />
+        <exclude org="log4j" module="log4j" />
+        <exclude org="commons-logging" module="*" />
+        <exclude org="org.aspectj" module="aspectjrt" />
+        <exclude org="org.aspectj" module="aspectjweaver" />
+        <exclude org="xerces" module="xercesImpl" />
+
+        <!-- WE WANT THESE VERSIONS -->
+        <override org="asm" module="*" rev="${asm.version}" />
+
+    </dependencies>
+
+</ivy-module>

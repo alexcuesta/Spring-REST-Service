@@ -1,0 +1,6 @@
+<!DOCTYPE defaults>
+<project name="defaults" basedir=".">
+
+    <property name="organisation" value="uk.co.pc" />
+
+</project>

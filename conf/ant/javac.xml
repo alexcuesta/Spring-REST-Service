@@ -1,0 +1,15 @@
+<!DOCTYPE project>
+<project name="javac" basedir=".">
+
+    <property name="java.target.version" value="1.6" />
+
+    <target name="javac" unless="skip.javac" description="Compiles classes in the src directory." >
+        <javac memorymaximumsize="256m" debug="true" deprecation="false" srcdir="${src.dir}" destdir="${build.tmp.dir}" nowarn="true" fork="true" target="${java.target.version}" source="${java.target.version}" includeantruntime="false">
+            <classpath refid="build.classpath" />
+            <include name="**/*.java" />
+        </javac>
+    </target>
+	
+   
+
+</project>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="spring-challenge-Alejandro" basedir="." default="war">
+
+    <!-- PROJECT SPECIFIC PROPERTIES -->
+
+    <property file="conf/project/build.properties" />
+    <property file="conf/project/versions.properties" />
+
+    <!-- BOOTSTRAP -->
+
+    <property name="ant.includes.dir" value="conf/ant" />
+
+    <!-- DEFAULT PROPERTIES -->
+
+    <import file="${ant.includes.dir}/defaults.xml" />
+
+    <!-- ENSURE PATHS ARE SET CORRECTLY -->
+
+    <import file="${ant.includes.dir}/paths.xml" />
+    <import file="${ant.includes.dir}/patterns.xml" />
+    <import file="${ant.includes.dir}/shared.xml" />
+
+    <!-- GENERALLY IMPORTANT TASKS -->
+
+    <import file="${ant.includes.dir}/ivy.xml" />
+    <import file="${ant.includes.dir}/init.xml" />
+    <import file="${ant.includes.dir}/javac.xml" />
+    <import file="${ant.includes.dir}/junit.xml" />
+    <import file="${ant.includes.dir}/tomcat.xml" />
+
+    <!-- PROJECT SPECIFIC TASKS -->
+
+    <target name="create-war" description="Produces a deployable WAR of the project.">
+        <war destfile="${dist.tmp.dir}/root.war" basedir="${web.dir}">
+            <classes dir="${build.tmp.dir}">
+                <patternset refid="no.test.classes" />
+                <include name="buildinfo.properties" />
+            </classes>
+            <lib dir="${libs.dir}/runtime">
+                <include name="*.jar" />
+            </lib>
+            <zipfileset dir="${conf.dir}/spring" prefix="WEB-INF/classes">
+                <patternset refid="xml" />
+                <exclude name="applicationContext-testing.xml" />
+            </zipfileset>
+            <zipfileset dir="${conf.dir}/logging" prefix="WEB-INF/classes">
+                <patternset refid="xml" />
+                <exclude name="logback-test.xml" />
+            </zipfileset>
+        </war>
+    </target>
+
+    <!-- MASTER TARGETS -->
+
+    <target name="build" depends="sanity.check, clean.tmp, init, ivy.resolve, javac" description="Resolves dependencies and compiles the project." />
+    <target name="test" depends="build, unittest" description="Builds and tests the project." />
+    <target name="war" depends="build, create-war" description="Builds and creates the deployable WAR." />
+
+</project>

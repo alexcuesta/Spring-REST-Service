@@ -1,0 +1,29 @@
+<!DOCTYPE project>
+<project name="junit" basedir=".">
+
+    <property name="tests.reports.dir" value="${reports.tmp.dir}/tests" />
+
+    <target name="unittest" unless="skip.test" description="Run all unit tests.">
+        <mkdir dir="${tests.reports.dir}" />
+        <junit printsummary="yes" haltonfailure="no" fork="yes" failureProperty="i.has.fail" errorProperty="i.has.fail" filtertrace="yes" forkMode="once" maxMemory="256m">
+            <assertions>
+                <enable />
+            </assertions>
+            <classpath refid="test.classpath" />
+            <formatter type="xml" />
+            <batchtest todir="${build.tmp.dir}">
+                <fileset dir="${test.src.dir}">
+                    <include name="**/*Test.java" />
+                </fileset>
+            </batchtest>
+        </junit>
+        <junitreport tofile="${tests.reports.dir}/TESTS-TestSuites.xml">
+            <fileset dir="${build.tmp.dir}">
+                <include name="TEST-*.xml" />
+            </fileset>
+            <report format="frames" todir="${tests.reports.dir}" />
+        </junitreport>
+        <fail message="One or more tests have failed! Please check the log file or console output." if="i.has.fail" />
+    </target>
+
+</project>

@@ -1,0 +1,14 @@
+<!DOCTYPE project>
+<project name="init" basedir=".">
+
+    <target name="init">
+        <mkdir dir="${libs.dir}" />
+        <mkdir dir="${build.tmp.dir}" />
+        <mkdir dir="${dist.tmp.dir}" />
+        <mkdir dir="${reports.tmp.dir}" />
+        <tstamp>
+            <format property="build.date" pattern="yyMMddHHmmss" />
+        </tstamp>
+    </target>
+
+</project>

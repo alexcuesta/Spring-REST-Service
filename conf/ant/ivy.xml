@@ -1,0 +1,12 @@
+<!DOCTYPE project>
+<project name="ivy" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+
+    <property name="ivy.dep.file" value="${project.conf.dir}/ivy.xml" />
+    <property name="ivy.settings.file" value="${project.conf.dir}/ivysettings.xml" />
+    <property name="ivy.reports.dir" value="${reports.tmp.dir}/ivy" />
+
+    <target name="ivy.resolve" unless="skip.resolve" description="Resolves project dependencies.">
+        <ivy:retrieve pattern="${libs.dir}/[conf]/[artifact]-[revision](-[classifier]).[ext]" haltonfailure="false" sync="true" />
+    </target>
+
+</project>

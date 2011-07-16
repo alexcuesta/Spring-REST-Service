@@ -1,0 +1,24 @@
+<!DOCTYPE project>
+<project name="patterns" basedir=".">
+
+    <patternset id="xml">
+        <include name="**/*.xml" />
+        <include name="**/*.xsl" />
+        <include name="**/*.xsd" />
+        <include name="**/*.dtd" />
+    </patternset>
+
+    <patternset id="xsd">
+        <include name="**/*.xsd" />
+    </patternset>
+
+    <patternset id="properties">
+        <include name="**/*.properties" />
+    </patternset>
+
+    <patternset id="no.test.classes">
+        <include name="**/*.class" />
+        <exclude name="**/*Test*.class" />
+    </patternset>
+
+</project>

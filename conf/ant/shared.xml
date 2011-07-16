@@ -1,0 +1,21 @@
+<!DOCTYPE project>
+<project name="shared" basedir=".">
+
+    <target name="sanity.check" description="Ensures that the basic mandatory properties are set.">
+        <fail unless="module.version" message="Module version is mandatory!" status="1" />
+        <echo message="Module version is set to ${module.version}...FTW!" />
+        <fail unless="java.target.version" message="Java target version is mandatory!" status="1" />
+        <echo message="Java target version is set to ${java.target.version}...FTW!" />
+    </target>
+
+    <target name="clean.tmp" description="Cleans the tmp directory.">
+        <delete dir="${tmp.dir}" quiet="true" />
+    </target>
+
+    <target name="clean.libs" description="Cleans the libs directory.">
+        <delete dir="${libs.dir}" quiet="true" />
+    </target>
+
+    <target name="clean" depends="clean.tmp, clean.libs" description="Cleans the project (removes the tmp and libs directories)." />
+
+</project>
