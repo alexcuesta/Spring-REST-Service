@@ -31,7 +31,6 @@ public class ArticleDaoImpl implements ArticleDao {
 	@Override
 	@Transactional
 	public Article save(Article article) {
-System.out.println("sessionFactory = "+sessionFactory);
 		sessionFactory.getCurrentSession().save(article);
 		return article;
 	}

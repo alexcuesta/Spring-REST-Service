@@ -1,12 +1,17 @@
 package uk.co.pc.domain.dao.impl;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.fail;
 
 import javax.annotation.Resource;
 
+import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
@@ -18,24 +23,32 @@ import uk.co.pc.domain.model.Article;
 @Transactional
 @TransactionConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:applicationContext-testing.xml")
+@ContextConfiguration(locations = {"classpath:applicationContext-properties.xml","classpath:applicationContext-hibernate.xml", "classpath:applicationContext-dao.xml"})
 public class ArticleDaoImplTest {
 
     private ArticleDao articleDao;
     private Article article;
-
-    @Before
-    public void setUp() {
-        article = Article.create();
-        articleDao.save(article);
-    }
+    
+    @Autowired
+    private SessionFactory sessionFactory;
 
     @Test
     public void saveShouldSaveAnArticle() {
-        fail("tbd");
+    	// given an article
+    	article = Article.create();
+    	
+    	// when I save it
+    	Article savedArticle = articleDao.save(article);
+    	
+    	// then id is populated
+    	assertThat("id is populated", savedArticle.getId(), is(notNullValue()));
+    	
+    	// and article is actually saved in database
+    	Article articleInDb = getArticleFromDb(savedArticle.getId());
+    	assertThat(articleInDb, is(savedArticle));
     }
 
-    @Test
+	@Test
     public void findByIdShouldReturnAnArticle() {
         fail("tbd");
     }
@@ -73,4 +86,11 @@ public class ArticleDaoImplTest {
     public void setArticleDao(final ArticleDao articleDao) {
         this.articleDao = articleDao;
     }
+    
+    private Article getArticleFromDb(Long id) {
+		return (Article) sessionFactory.getCurrentSession()
+				.createQuery("from Article where id=:id")
+				.setParameter("id", id)
+				.uniqueResult();
+	}
 }

@@ -23,7 +23,6 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	public Article save(Article article) {
-System.out.println("service: article.title="+article.getTitle());
 		return articleDao.save(article);
 	}
 

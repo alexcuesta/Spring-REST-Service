@@ -1,7 +1,12 @@
 package uk.co.pc.service.impl;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.fail;
+import static org.mockito.BDDMockito.given;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -18,10 +23,23 @@ public class ArticleServiceImplTest {
 
     @Mock
     private ArticleDao articleDao;
+    
+    @Before
+    public void setup() {
+    	articleService = new ArticleServiceImpl(articleDao);
+    }
 
     @Test
     public void saveShouldSaveAnArticle() {
-        fail("tbd");
+    	// given the dao stores and returns an article successfully
+    	Article storedArticle = Article.create();
+    	given(articleDao.save(article)).willReturn(storedArticle);
+    	
+    	// when
+    	Article returnedArticle = articleService.save(article);
+    	
+    	// then 
+    	assertThat(returnedArticle, is(sameInstance(storedArticle)));
     }
 
     @Test
