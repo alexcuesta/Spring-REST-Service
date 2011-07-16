@@ -30,7 +30,7 @@
                 <!-- DATABASE AND HIBERNATE STUFF -->
                 <prop key="db.driverClassName">org.h2.Driver</prop>
                 <prop key="db.url">jdbc:h2:tcp://localhost/tmp/pc</prop>
-                <prop key="db.username"></prop>
+                <prop key="db.username">sa</prop>
                 <prop key="db.password"></prop>
                 <prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
                 <prop key="hibernate.hbm2ddl.auto">create</prop>
@@ -49,6 +49,8 @@
 
     <!-- DATABASE AND TRANSACTIONS -->
     <import resource="classpath:applicationContext-hibernate.xml" />
+    <import resource="classpath:applicationContext-dao.xml" />
+    <import resource="classpath:applicationContext-service.xml" />
 
     <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
         <property name="messageConverters">

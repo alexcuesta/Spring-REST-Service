@@ -18,20 +18,38 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import uk.co.pc.domain.dao.ArticleDao;
+import uk.co.pc.domain.dao.helper.DaoHelper;
 import uk.co.pc.domain.model.Article;
+import uk.co.pc.domain.model.ArticleBuilder;
 
+/**
+ * DAO Integration tests
+ * 
+ * If we were testing a non in-memory database, we might want to move out this test from unit tests because they are executed slower
+ * @author alex
+ *
+ */
 @Transactional
 @TransactionConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:applicationContext-properties.xml","classpath:applicationContext-hibernate.xml", "classpath:applicationContext-dao.xml"})
+@ContextConfiguration(locations = {	"classpath:applicationContext-properties.xml",
+									"classpath:applicationContext-hibernate.xml", 
+									"classpath:applicationContext-dao.xml",
+									"classpath:applicationContext-testing-helper.xml"})
 public class ArticleDaoImplTest {
 
     private ArticleDao articleDao;
     private Article article;
+    private ArticleBuilder givenArticle;
     
     @Autowired
-    private SessionFactory sessionFactory;
-
+    private DaoHelper daoHelper;
+    
+    @Before
+    public void setup() {
+    	givenArticle = new ArticleBuilder(daoHelper);
+    }
+    
     @Test
     public void saveShouldSaveAnArticle() {
     	// given an article
@@ -44,14 +62,22 @@ public class ArticleDaoImplTest {
     	assertThat("id is populated", savedArticle.getId(), is(notNullValue()));
     	
     	// and article is actually saved in database
-    	Article articleInDb = getArticleFromDb(savedArticle.getId());
+    	Article articleInDb = daoHelper.getArticleFromDb(savedArticle.getId());
     	assertThat(articleInDb, is(savedArticle));
     }
 
 	@Test
     public void findByIdShouldReturnAnArticle() {
-        fail("tbd");
-    }
+		// given an article in db
+		Article articleInDb = givenArticle.withTitle("Clean code")
+										  .withAuthor("Uncle Bob")
+										  .isInDatabase();
+		// when I find it by id
+		Article foundArticle = articleDao.findById(articleInDb.getId());
+		
+		// then
+		assertThat(foundArticle, is(articleInDb));
+	}
 
     @Test
     public void findByInvalidIdShouldNotReturnAnArticle() {
@@ -87,10 +113,5 @@ public class ArticleDaoImplTest {
         this.articleDao = articleDao;
     }
     
-    private Article getArticleFromDb(Long id) {
-		return (Article) sessionFactory.getCurrentSession()
-				.createQuery("from Article where id=:id")
-				.setParameter("id", id)
-				.uniqueResult();
-	}
+ 
 }

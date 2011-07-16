@@ -10,6 +10,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -66,5 +69,22 @@ public class Article {
     public void setAuthor(final String author) {
         this.author = author;
     }
+
+	@Override
+	public boolean equals(Object other) {
+		return EqualsBuilder.reflectionEquals(this, other);
+	}
+
+	@Override
+	public int hashCode() {
+		return HashCodeBuilder.reflectionHashCode(this);
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this);
+	}
+    
+    
 
 }

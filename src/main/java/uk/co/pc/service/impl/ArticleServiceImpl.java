@@ -34,8 +34,7 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	public Article findById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return articleDao.findById(id);
 	}
 
 	@Override

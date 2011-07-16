@@ -31,15 +31,15 @@ public class ArticleServiceImplTest {
 
     @Test
     public void saveShouldSaveAnArticle() {
-    	// given the dao stores and returns an article successfully
-    	Article storedArticle = Article.create();
-    	given(articleDao.save(article)).willReturn(storedArticle);
+    	// given dao stores and returns an article successfully
+    	Article articleReturnedByDao = Article.create();
+    	given(articleDao.save(article)).willReturn(articleReturnedByDao);
     	
     	// when
     	Article returnedArticle = articleService.save(article);
     	
     	// then 
-    	assertThat(returnedArticle, is(sameInstance(storedArticle)));
+    	assertThat(returnedArticle, is(sameInstance(articleReturnedByDao)));
     }
 
     @Test
@@ -49,7 +49,17 @@ public class ArticleServiceImplTest {
 
     @Test
     public void findByIdShouldReturnAnArticle() {
-        fail("tbd");
+    	// given an id
+    	Long id = 1L;
+    	// and dao successfully finds article by id
+    	Article articleReturnedByDao = Article.create();
+    	given(articleDao.findById(id)).willReturn(articleReturnedByDao);
+    	
+    	// when
+    	Article returnedArticle = articleService.findById(id);
+    	
+    	// then
+    	assertThat(returnedArticle, is(sameInstance(articleReturnedByDao)));
     }
 
     @Test

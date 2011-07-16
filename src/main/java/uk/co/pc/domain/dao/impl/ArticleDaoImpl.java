@@ -19,6 +19,7 @@ import uk.co.pc.domain.model.Article;
  * 
  * Assume happy path with no exceptions.
  */
+@Transactional
 public class ArticleDaoImpl implements ArticleDao {
 
 	private SessionFactory sessionFactory;
@@ -29,7 +30,6 @@ public class ArticleDaoImpl implements ArticleDao {
 	}
 
 	@Override
-	@Transactional
 	public Article save(Article article) {
 		sessionFactory.getCurrentSession().save(article);
 		return article;
@@ -43,8 +43,10 @@ public class ArticleDaoImpl implements ArticleDao {
 
 	@Override
 	public Article findById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return (Article) sessionFactory.getCurrentSession()
+				.createQuery("from Article where id=:id")
+				.setParameter("id", id)
+				.uniqueResult();
 	}
 
 	@Override

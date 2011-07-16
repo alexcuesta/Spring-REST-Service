@@ -47,7 +47,7 @@ public class ArticleControllerImpl implements ArticleController {
 	@Override
 	@RequestMapping("/article/{id}")
 	public Article getArticleById(@PathVariable Long id) {
-		return Article.create();
+		return articleService.findById(id);
 	}
 
 	@Override
