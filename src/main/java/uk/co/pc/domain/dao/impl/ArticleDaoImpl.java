@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.hibernate.SessionFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import uk.co.pc.domain.dao.ArticleDao;
 import uk.co.pc.domain.model.Article;
@@ -20,10 +21,19 @@ import uk.co.pc.domain.model.Article;
  */
 public class ArticleDaoImpl implements ArticleDao {
 
+	private SessionFactory sessionFactory;
+
+	
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
 	@Override
+	@Transactional
 	public Article save(Article article) {
-		// TODO Auto-generated method stub
-		return null;
+System.out.println("sessionFactory = "+sessionFactory);
+		sessionFactory.getCurrentSession().save(article);
+		return article;
 	}
 
 	@Override

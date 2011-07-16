@@ -15,10 +15,16 @@ import uk.co.pc.service.ArticleService;
  */
 public class ArticleServiceImpl implements ArticleService {
 
+	private final ArticleDao articleDao;
+	
+	public ArticleServiceImpl(ArticleDao articleDao) {
+		this.articleDao = articleDao;
+	}
+
 	@Override
 	public Article save(Article article) {
-		// TODO Auto-generated method stub
-		return null;
+System.out.println("service: article.title="+article.getTitle());
+		return articleDao.save(article);
 	}
 
 	@Override

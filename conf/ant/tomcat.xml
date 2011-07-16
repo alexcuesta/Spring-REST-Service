@@ -36,7 +36,7 @@
 	            path="${path}"/>
 	  </target>
 	
-	<target name="redeploy" depends="war,deploy" description="Redeploys web application" />
+	<target name="redeploy" depends="war,undeploy,deploy" description="Redeploys web application" />
 	
    
 	<target name="tomcat-start">
@@ -51,5 +51,14 @@
 	        <arg line="stop"/>
 	    </java>
 	</target>
+	
+	<target name="tomcat-start-debug">
+	    <java jar="${tomcat.home}/bin/bootstrap.jar" fork="true">
+	        <jvmarg value="-Dcatalina.home=${tomcat.home}"/>
+	        <jvmarg value="-Xdebug"/>
+	        <jvmarg value="-Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n"/>
+	    </java>
+	</target>
+	
 
 </project>

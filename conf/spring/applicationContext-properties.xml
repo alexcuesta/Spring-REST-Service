@@ -26,7 +26,7 @@
                 <!-- DATABASE AND HIBERNATE STUFF -->
                 <prop key="db.driverClassName">org.h2.Driver</prop>
                 <prop key="db.url">jdbc:h2:tcp://localhost/tmp/pc</prop>
-                <prop key="db.username"></prop>
+                <prop key="db.username">sa</prop>
                 <prop key="db.password"></prop>
                 <prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
                 <prop key="hibernate.hbm2ddl.auto">validate</prop>
