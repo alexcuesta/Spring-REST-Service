@@ -2,10 +2,10 @@ package uk.co.pc.web.controller.impl;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.fail;
 
 import javax.annotation.Resource;
-import javax.xml.transform.Source;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +13,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import uk.co.pc.domain.dao.helper.DaoHelper;
@@ -40,7 +42,7 @@ public class ArticleControllerImplTest {
 
     @Test
     public void getArticleById() {
-    	// given    	
+    	// given	
     	Article articleInDb = givenArticle.withTitle("title")
     								  .withAuthor("author")
     								  .isInDatabase();
@@ -62,7 +64,22 @@ public class ArticleControllerImplTest {
         fail("tbd");
     }
 
-    /* ADD MORE TESTS HERE */
+    @Test
+    public void saveArticle() {
+    	// given
+    	MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
+    	parameters.add("title", "DDD");
+    	parameters.add("author", "Evans");
+    	
+    	// when
+    	Article returnedArticle = restTemplate.postForObject(BASEURL, parameters, Article.class);
+    	
+    	// then
+    	assertThat("id", returnedArticle.getId(), is(notNullValue()));
+    	assertThat("title", returnedArticle.getTitle(), is("DDD"));
+    	assertThat("author", returnedArticle.getAuthor(), is("Evans"));
+    	
+    }
     
     /* Spring Injected Values/Collaborators */
 

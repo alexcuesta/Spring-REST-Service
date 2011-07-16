@@ -54,11 +54,14 @@
 
     <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
         <property name="messageConverters">
-            <bean id="marshallingConverter" class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
-                <property name="marshaller" ref="jaxbMarshaller" />
-                <property name="unmarshaller" ref="jaxbMarshaller" />
-                <property name="supportedMediaTypes" value="application/xml" />
-            </bean>
+        	<list>
+	            <bean id="marshallingConverter" class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+	                <property name="marshaller" ref="jaxbMarshaller" />
+	                <property name="unmarshaller" ref="jaxbMarshaller" />
+	                <property name="supportedMediaTypes" value="application/xml" />
+	            </bean>
+	            <bean id="formConverter" class="org.springframework.http.converter.FormHttpMessageConverter" />
+            </list>
         </property>
     </bean>
 
