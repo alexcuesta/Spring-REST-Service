@@ -21,14 +21,8 @@ Requisites
 Usage
 -----
 
-```sh
-mvn docbkx:generate-html
-xdg-open target/docbkx/html/article/article.html
-```
 
 References
 ----------
 
-* http://docbkx-tools.sourceforge.net/docbkx-maven-plugin/plugin-info.html
-* http://code.google.com/p/docbkx-tools/
 

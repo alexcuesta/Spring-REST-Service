@@ -1,9 +1,12 @@
 package uk.co.pc.web.controller.impl;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.fail;
+
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -20,6 +23,7 @@ import org.springframework.web.client.RestTemplate;
 import uk.co.pc.domain.dao.helper.DaoHelper;
 import uk.co.pc.domain.model.Article;
 import uk.co.pc.domain.model.ArticleBuilder;
+import uk.co.pc.web.bean.ArticleList;
 
 /**
  * Please run this test AFTER you have deployed the application into a web container (jetty, tomcat...)
@@ -43,8 +47,8 @@ public class ArticleControllerFunctionalTest {
     @Test
     public void getArticleById() {
     	// given	
-    	Article articleInDb = givenArticle.withTitle("title")
-    								  .withAuthor("author")
+    	Article articleInDb = givenArticle.withTitle("Clean Code")
+    								  .withAuthor("Uncle Bob")
     								  .isInDatabase();
     	// when
     	final String articleByIdUrl = BASEURL + "/" + articleInDb.getId();
@@ -56,7 +60,21 @@ public class ArticleControllerFunctionalTest {
 
     @Test
     public void getArticlesByTitle() {
-        fail("tbd");
+    	// given some articles in db
+    	Article articleEvansInDb = givenArticle.withTitle("DDD").withAuthor("Evans").isInDatabase();
+    	Article articleBobInDb = givenArticle.withTitle("Clean Code").withAuthor("Uncle Bob").isInDatabase();
+    	Article articleOtherInDb = givenArticle.withTitle("DDD").withAuthor("Other").isInDatabase();
+    	// and a title to search
+    	String titleToSearch = "DDD";
+    	
+    	// when
+    	final String articleByIdUrl = BASEURL + "?title=" + titleToSearch;
+    	ArticleList returnedArticles = restTemplate.getForObject(articleByIdUrl, ArticleList.class);
+
+    	// then
+    	List<Article> actualArticles = returnedArticles.getArticles();
+		assertThat("size", actualArticles.size(), is(2)); 
+    	assertThat("articles", actualArticles, hasItems(articleEvansInDb, articleOtherInDb));   
     }
 
     @Test
