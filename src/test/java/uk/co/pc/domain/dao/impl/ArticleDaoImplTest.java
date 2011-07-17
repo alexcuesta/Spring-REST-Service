@@ -5,6 +5,9 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.hibernate.SessionFactory;
@@ -25,16 +28,15 @@ import uk.co.pc.domain.model.ArticleBuilder;
 /**
  * DAO Integration tests
  * 
- * If we were testing a non in-memory database, we might want to move out this test from unit tests because they are executed slower
+ * Testing with an embedded database
+ * @see http://static.springsource.org/spring/docs/3.0.x/reference/jdbc.html#jdbc-embedded-database-support
  * @author alex
  *
  */
 @Transactional
 @TransactionConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {	"classpath:applicationContext-properties.xml",
-									"classpath:applicationContext-hibernate.xml", 
-									"classpath:applicationContext-dao.xml",
+@ContextConfiguration(locations = {	"classpath:applicationContext-testing-dao.xml",
 									"classpath:applicationContext-testing-helper.xml"})
 public class ArticleDaoImplTest {
 
@@ -73,10 +75,10 @@ public class ArticleDaoImplTest {
 										  .withAuthor("Uncle Bob")
 										  .isInDatabase();
 		// when I find it by id
-		Article foundArticle = articleDao.findById(articleInDb.getId());
+		Article articleFound = articleDao.findById(articleInDb.getId());
 		
 		// then
-		assertThat(foundArticle, is(articleInDb));
+		assertThat(articleFound, is(articleInDb));
 	}
 
     @Test
@@ -86,8 +88,17 @@ public class ArticleDaoImplTest {
 
     @Test
     public void findByTitleShouldReturnAnArticle() {
-        fail("tbd");
-    }
+		// given an article in db
+		Article articleInDb = givenArticle.withTitle("Clean code")
+										  .withAuthor("Uncle Bob")
+										  .isInDatabase();
+		// when I find it by id
+		List<Article> foundArticle = articleDao.findByTitle("Clean code");
+		
+		// then
+		List<Article> expectedArticles = Arrays.asList(articleInDb);
+		assertThat(foundArticle, is(expectedArticles));    
+	}
 
     @Test
     public void findByInvalidTitleShouldNotReturnAnArticle() {

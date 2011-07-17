@@ -1,6 +1,9 @@
 package uk.co.pc.web.controller.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,9 +54,10 @@ public class ArticleControllerImpl implements ArticleController {
 	}
 
 	@Override
+	@RequestMapping(value="/article", method=RequestMethod.GET)
 	public ArticleList getArticlesByTitle(String title) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Article> articles = articleService.findByTitle(title);
+		return new ArticleList(articles);
 	}
 
 	@Override

@@ -39,8 +39,7 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	public List<Article> findByTitle(String title) {
-		// TODO Auto-generated method stub
-		return null;
+		return articleDao.findByTitle(title);
 	}
 
 	@Override

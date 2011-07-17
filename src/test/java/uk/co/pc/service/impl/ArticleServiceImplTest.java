@@ -6,6 +6,9 @@ import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.fail;
 import static org.mockito.BDDMockito.given;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -62,14 +65,30 @@ public class ArticleServiceImplTest {
     	assertThat(returnedArticle, is(sameInstance(articleReturnedByDao)));
     }
 
-    @Test
+    @Test(expected=InvalidIdException.class)
     public void findByInvalidIdShouldNotReturnAnArticle() {
-        fail("tbd");
+        // given 
+    	Long invalidId = -1L;
+    	
+    	// when 
+    	articleService.findById(invalidId);
+    	
+    	// then it should throw an InvalidIdException because I don't want problems with null objects
     }
 
     @Test
     public void findByTitleShouldReturnAnArticle() {
-        fail("tbd");
+    	// given a title
+    	String title = "Domain Driven Design";
+    	// and the dao sucessfully returns an article
+    	List<Article> articlesFound = Arrays.asList(new Article());
+    	given(articleDao.findByTitle(title)).willReturn(articlesFound);
+    	
+    	// when
+    	List<Article> actualArticles = articleService.findByTitle(title);
+    	
+    	// then
+    	assertThat(actualArticles, is(articlesFound));
     }
 
     @Test

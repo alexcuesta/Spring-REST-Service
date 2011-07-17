@@ -1,91 +1,80 @@
 package uk.co.pc.web.controller.impl;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.fail;
+import static org.hamcrest.Matchers.sameInstance;
+import static org.junit.Assert.assertThat;
+import static org.mockito.BDDMockito.given;
 
-import javax.annotation.Resource;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
-import uk.co.pc.domain.dao.helper.DaoHelper;
 import uk.co.pc.domain.model.Article;
-import uk.co.pc.domain.model.ArticleBuilder;
+import uk.co.pc.service.ArticleService;
+import uk.co.pc.web.bean.ArticleList;
 
-/**
- * Please run this test AFTER you have deployed the application into a web container (jetty, tomcat...)
- */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:applicationContext-testing.xml", "classpath:applicationContext-testing-helper.xml"})
+@RunWith(MockitoJUnitRunner.class)
 public class ArticleControllerImplTest {
+	
+	private ArticleControllerImpl controller;
+	
+	@Mock
+	private ArticleService articleService;
+	
+	@Before
+	public void setup() {
+		controller = new ArticleControllerImpl(articleService);
+	}
+	
 
-    private static final String BASEURL = "http://localhost:8080/article";
-    private RestTemplate restTemplate;
-    private ArticleBuilder givenArticle;
-    
-    @Autowired
-    private DaoHelper daoHelper;
-    
-    @Before
-    public void setup() {
-    	givenArticle = new ArticleBuilder(daoHelper);
-    }
-
-    @Test
-    public void getArticleById() {
-    	// given	
-    	Article articleInDb = givenArticle.withTitle("title")
-    								  .withAuthor("author")
-    								  .isInDatabase();
-    	// when
-    	final String articleByIdUrl = BASEURL + "/" + articleInDb.getId();
-    	Article returnedArticle = restTemplate.getForObject(articleByIdUrl, Article.class);
-
-    	// then
-    	assertThat(returnedArticle, is(articleInDb));
-    }
-
-    @Test
-    public void getArticlesByTitle() {
-        fail("tbd");
-    }
-
-    @Test
-    public void getArticlesByAuthor() {
-        fail("tbd");
-    }
-
-    @Test
-    public void saveArticle() {
-    	// given
-    	MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
-    	parameters.add("title", "DDD");
-    	parameters.add("author", "Evans");
-    	
-    	// when
-    	Article returnedArticle = restTemplate.postForObject(BASEURL, parameters, Article.class);
-    	
-    	// then
-    	assertThat("id", returnedArticle.getId(), is(notNullValue()));
-    	assertThat("title", returnedArticle.getTitle(), is("DDD"));
-    	assertThat("author", returnedArticle.getAuthor(), is("Evans"));
-    	
-    }
-    
-    /* Spring Injected Values/Collaborators */
-
-    @Resource
-    public void setRestTemplate(final RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
-
+	@Test
+	public void shouldSaveArticle() throws Exception {
+		// given an article
+		Article articleToSave = new Article();
+		// and the service successfully saves and returns it back with an id
+		Article savedArticle = new Article();
+		given(articleService.save(articleToSave)).willReturn(savedArticle);
+		
+		// when
+		Article actualArticle = controller.save(articleToSave);
+				
+		// then 
+		assertThat(actualArticle, is(sameInstance(savedArticle)));
+	}
+	
+	@Test
+	public void shouldGetArticleById() throws Exception {
+		// given an id
+		Long id = 1L;
+		// and the service successfully returns the article from database
+		Article articleInDb = new Article();
+		given(articleService.findById(id)).willReturn(articleInDb);
+		
+		// when
+		Article actualArticle = controller.getArticleById(id);
+		
+		// then 
+		assertThat(actualArticle, is(sameInstance(articleInDb)));
+	}
+	
+	@Test
+	public void shouldGetArticlesByTitle() throws Exception {
+		// given a title
+		String title = "Clean Code";
+		// and the service successfully returns a list of articles from database
+		Article articleFound = new Article();
+		List<Article> articlesFound = Arrays.asList(articleFound);
+		given(articleService.findByTitle(title)).willReturn(articlesFound);
+		
+		// when
+		ArticleList actualArticles = controller.getArticlesByTitle(title);
+		
+		// then
+		assertThat(actualArticles.getArticles(), is(sameInstance(articlesFound)));
+	}
 }
