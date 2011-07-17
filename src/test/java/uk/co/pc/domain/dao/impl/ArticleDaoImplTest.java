@@ -3,6 +3,7 @@ package uk.co.pc.domain.dao.impl;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.fail;
 
 import java.util.Arrays;
@@ -10,7 +11,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -116,6 +116,21 @@ public class ArticleDaoImplTest {
     }
     
     /* ADD MORE TESTS HERE */
+
+    @Test
+	public void shouldDeleteArticle() throws Exception {
+		// given 
+		Article articleInDb = givenArticle.withTitle("Clean code")
+										  .withAuthor("Uncle Bob")
+										  .isInDatabase();
+    	
+    	// when
+		articleDao.delete(articleInDb.getId());
+		
+    	// then 
+    	Article articleNotFound = daoHelper.getArticleFromDb(articleInDb.getId());
+    	assertThat(articleNotFound, is(nullValue()));
+	}
     
     /* Spring Injected Values/Collaborators */
 

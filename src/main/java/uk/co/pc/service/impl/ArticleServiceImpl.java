@@ -28,8 +28,7 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	public void delete(Long id) {
-		// TODO Auto-generated method stub
-		
+		articleDao.delete(id);
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.fail;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 import java.util.Arrays;
 import java.util.List;
@@ -47,7 +48,14 @@ public class ArticleServiceImplTest {
 
     @Test
     public void deleteShouldDeleteAnArticle() {
-        fail("tbd");
+        // given
+    	Long id = 1L;
+    	
+    	// when
+    	articleService.delete(id);
+    	
+    	// then
+    	verify(articleDao).delete(id);
     }
 
     @Test

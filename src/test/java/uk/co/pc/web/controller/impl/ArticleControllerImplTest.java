@@ -2,8 +2,10 @@ package uk.co.pc.web.controller.impl;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.sameInstance;
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 import java.util.Arrays;
 import java.util.List;
@@ -76,5 +78,17 @@ public class ArticleControllerImplTest {
 		
 		// then
 		assertThat(actualArticles.getArticles(), is(sameInstance(articlesFound)));
+	}
+	
+	@Test
+	public void shouldDeleteArticle() throws Exception {
+		// given 
+		Long id = 1L;
+		
+		// when
+		controller.delete(id);
+		
+		// then
+		verify(articleService).delete(id);
 	}
 }

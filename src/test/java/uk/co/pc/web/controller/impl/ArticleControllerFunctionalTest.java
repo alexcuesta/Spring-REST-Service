@@ -4,6 +4,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.*;
 import static org.junit.Assert.fail;
 
 import java.util.List;
@@ -23,6 +25,7 @@ import org.springframework.web.client.RestTemplate;
 import uk.co.pc.domain.dao.helper.DaoHelper;
 import uk.co.pc.domain.model.Article;
 import uk.co.pc.domain.model.ArticleBuilder;
+import uk.co.pc.service.impl.InvalidIdException;
 import uk.co.pc.web.bean.ArticleList;
 
 /**
@@ -98,6 +101,22 @@ public class ArticleControllerFunctionalTest {
     	assertThat("author", returnedArticle.getAuthor(), is("Evans"));
     	
     }
+    
+    @Test(expected=Exception.class)
+	public void deleteArticle() throws Exception {
+    	// given 
+    	Article articleInDb = givenArticle.withTitle("Clean Code")
+										  .withAuthor("Uncle Bob")
+										  .isInDatabase();
+		// when
+    	final String deleteArticleUrl = BASEURL + "/" + articleInDb.getId();
+    	restTemplate.delete(deleteArticleUrl);
+    	
+    	// then article is not found
+    	Article articleNotFound = daoHelper.getArticleFromDb(articleInDb.getId());
+    	assertThat(articleNotFound, is(nullValue()));
+    	
+	}
     
     /* Spring Injected Values/Collaborators */
 

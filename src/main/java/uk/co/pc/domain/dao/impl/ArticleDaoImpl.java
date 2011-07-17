@@ -37,8 +37,10 @@ public class ArticleDaoImpl implements ArticleDao {
 
 	@Override
 	public void delete(Long id) {
-		// TODO Auto-generated method stub
-		
+		sessionFactory.getCurrentSession()
+						.createQuery("delete from Article where id=:id")
+				        .setLong("id", id)
+				        .executeUpdate();
 	}
 
 	@Override
