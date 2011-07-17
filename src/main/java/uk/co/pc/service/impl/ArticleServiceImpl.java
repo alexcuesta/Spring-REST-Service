@@ -44,8 +44,7 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	public List<Article> findByAuthor(String author) {
-		// TODO Auto-generated method stub
-		return null;
+		return articleDao.findByAuthor(author);
 	}
    
 }

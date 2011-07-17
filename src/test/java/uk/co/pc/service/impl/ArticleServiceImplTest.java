@@ -21,6 +21,12 @@ import uk.co.pc.domain.dao.ArticleDao;
 import uk.co.pc.domain.dao.exception.ArticleNotFoundException;
 import uk.co.pc.domain.model.Article;
 
+/**
+ * Tests the business logic.
+ * In this app we don't have business rules so service implementation is almost empty
+ * @author alex
+ *
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class ArticleServiceImplTest {
 
@@ -106,13 +112,20 @@ public class ArticleServiceImplTest {
 
     @Test
     public void findByAuthorShouldReturnAnArticle() {
-        fail("tbd");
+    	// given a author
+    	String author = "Uncle bob";
+    	// and the dao sucessfully returns an article
+    	List<Article> articlesFound = Arrays.asList(new Article());
+    	given(articleDao.findByAuthor(author)).willReturn(articlesFound);
+    	
+    	// when
+    	List<Article> actualArticles = articleService.findByAuthor(author);
+    	
+    	// then
+    	assertThat(actualArticles, is(articlesFound));
     }
 
-    @Test
-    public void findByInvalidAuthorShouldNotReturnAnArticle() {
-        fail("tbd");
-    }
+  
     
     /* ADD MORE TESTS HERE */
 

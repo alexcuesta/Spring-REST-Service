@@ -1,5 +1,6 @@
 package uk.co.pc.web.controller.impl;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import uk.co.pc.domain.dao.exception.ArticleNotFoundException;
 import uk.co.pc.domain.model.Article;
 import uk.co.pc.service.ArticleService;
 import uk.co.pc.web.bean.ArticleList;
@@ -60,11 +62,17 @@ public class ArticleControllerImpl implements ArticleController {
 	@RequestMapping("/article/{id}")
 	public Article getArticleById(@PathVariable Long id) {
 		log.info("Getting article by id {}", id);
-		return articleService.findById(id);
+		try {
+			return articleService.findById(id);
+			
+		} catch (ArticleNotFoundException e) {
+			// TODO Auto-generated catch block
+			return null;
+		}
 	}
 
 	@Override
-	@RequestMapping(value="/article", method=RequestMethod.GET)
+	@RequestMapping(value="/article", params="title", method=RequestMethod.GET)
 	public ArticleList getArticlesByTitle(String title) {
 		log.info("Getting articles by title '{}'", title);
 		List<Article> articles = articleService.findByTitle(title);
@@ -72,10 +80,11 @@ public class ArticleControllerImpl implements ArticleController {
 	}
 
 	@Override
+	@RequestMapping(value="/article", params="author", method=RequestMethod.GET)
 	public ArticleList getArticlesByAuthor(String author) {
 		log.info("Getting articles by author '{}'", author);
-		// TODO Auto-generated method stub
-		return null;
+		List<Article> articles = articleService.findByAuthor(author);
+		return new ArticleList(articles);
 	}
 
 

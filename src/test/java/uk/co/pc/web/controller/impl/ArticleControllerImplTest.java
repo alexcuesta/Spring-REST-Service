@@ -65,6 +65,22 @@ public class ArticleControllerImplTest {
 	}
 	
 	@Test
+	public void shouldGetArticlesByAuthor() throws Exception {
+		// given a title
+		String author = "Evans";
+		// and the service successfully returns a list of articles from database
+		Article articleFound = new Article();
+		List<Article> articlesFound = Arrays.asList(articleFound);
+		given(articleService.findByAuthor(author)).willReturn(articlesFound);
+		
+		// when
+		ArticleList actualArticles = controller.getArticlesByAuthor(author);
+		
+		// then
+		assertThat(actualArticles.getArticles(), is(sameInstance(articlesFound)));
+	}
+	
+	@Test
 	public void shouldGetArticlesByTitle() throws Exception {
 		// given a title
 		String title = "Clean Code";

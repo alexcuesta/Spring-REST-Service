@@ -124,12 +124,27 @@ public class ArticleDaoImplTest {
 
     @Test
     public void findByAuthorShouldReturnAnArticle() {
-        fail("tbd");
-    }
+		// given an article in db
+		Article articleInDb = givenArticle.withTitle("Clean code")
+										  .withAuthor("Uncle Bob")
+										  .isInDatabase();
+		// when
+		List<Article> foundArticles = articleDao.findByAuthor("Uncle Bob");
+		
+		// then
+		List<Article> expectedArticles = Arrays.asList(articleInDb);
+		assertThat(foundArticles, is(expectedArticles));     }
 
     @Test
     public void findByInvalidAuthorShouldNotReturnAnArticle() {
-        fail("tbd");
+		// given an invalid title in db
+    	String invalidAuthor = "invalid author";
+    	
+    	// when I find it by id
+    	List<Article>  foundArticles = articleDao.findByAuthor(invalidAuthor);
+		
+	   	// then 
+    	assertThat(foundArticles.isEmpty(), is(true));    
     }
     
     /* ADD MORE TESTS HERE */

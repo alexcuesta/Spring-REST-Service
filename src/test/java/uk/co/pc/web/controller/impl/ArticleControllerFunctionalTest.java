@@ -5,8 +5,6 @@ import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.*;
-import static org.junit.Assert.fail;
 
 import java.util.List;
 
@@ -27,7 +25,6 @@ import org.springframework.web.client.RestTemplate;
 import uk.co.pc.domain.dao.helper.DaoHelper;
 import uk.co.pc.domain.model.Article;
 import uk.co.pc.domain.model.ArticleBuilder;
-import uk.co.pc.service.impl.InvalidIdException;
 import uk.co.pc.web.bean.ArticleList;
 
 /**
@@ -46,6 +43,7 @@ public class ArticleControllerFunctionalTest {
     
     @Before
     public void setup() {
+    	daoHelper.deleteAllArticles();
     	givenArticle = new ArticleBuilder(daoHelper);
     }
 
@@ -73,8 +71,8 @@ public class ArticleControllerFunctionalTest {
     	String titleToSearch = "DDD";
     	
     	// when
-    	final String articleByIdUrl = BASEURL + "?title=" + titleToSearch;
-    	ArticleList returnedArticles = restTemplate.getForObject(articleByIdUrl, ArticleList.class);
+    	final String articleByTitleUrl = BASEURL + "?title=" + titleToSearch;
+    	ArticleList returnedArticles = restTemplate.getForObject(articleByTitleUrl, ArticleList.class);
 
     	// then
     	List<Article> actualArticles = returnedArticles.getArticles();
@@ -84,8 +82,21 @@ public class ArticleControllerFunctionalTest {
 
     @Test
     public void getArticlesByAuthor() {
-        fail("tbd");
-    }
+    	// given some articles in db
+    	Article articleDDDInDb = givenArticle.withTitle("DDD").withAuthor("Evans").isInDatabase();
+    	Article articleCleanCodeInDb = givenArticle.withTitle("Clean Code").withAuthor("Uncle Bob").isInDatabase();
+    	Article articleOtherInDb = givenArticle.withTitle("Other title").withAuthor("Evans").isInDatabase();
+    	// and a title to search
+    	String authorToSearch = "Evans";
+    	
+    	// when
+    	final String articleByAuthorUrl = BASEURL + "?author=" + authorToSearch;
+    	ArticleList returnedArticles = restTemplate.getForObject(articleByAuthorUrl, ArticleList.class);
+
+    	// then
+    	List<Article> actualArticles = returnedArticles.getArticles();
+		assertThat("size", actualArticles.size(), is(2)); 
+    	assertThat("articles", actualArticles, hasItems(articleDDDInDb, articleOtherInDb));     }
 
     @Test
     public void saveArticle() {

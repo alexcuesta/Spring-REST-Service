@@ -25,4 +25,10 @@ public class DaoHelper {
 		sessionFactory.getCurrentSession().save(article);
 		return article;			 
 	}
+
+	public void deleteAllArticles() {
+		sessionFactory.getCurrentSession()
+		.createQuery("delete from Article")
+        .executeUpdate();
+	}
 }

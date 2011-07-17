@@ -74,8 +74,10 @@ public class ArticleDaoImpl implements ArticleDao {
 
 	@Override
 	public List<Article> findByAuthor(String author) {
-		// TODO Auto-generated method stub
-		return null;
+		return (List<Article>) sessionFactory.getCurrentSession()
+				.createQuery("from Article where author=:author")
+				.setParameter("author", author)
+				.list();
 	}
    
 }
