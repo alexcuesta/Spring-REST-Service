@@ -102,7 +102,7 @@ public class ArticleControllerFunctionalTest {
     	
     }
     
-    @Test(expected=Exception.class)
+    @Test
 	public void deleteArticle() throws Exception {
     	// given 
     	Article articleInDb = givenArticle.withTitle("Clean Code")
@@ -117,6 +117,8 @@ public class ArticleControllerFunctionalTest {
     	assertThat(articleNotFound, is(nullValue()));
     	
 	}
+    
+    
     
     /* Spring Injected Values/Collaborators */
 

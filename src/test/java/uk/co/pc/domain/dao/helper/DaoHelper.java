@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import uk.co.pc.domain.model.Article;
 
+@Transactional
 public class DaoHelper {
 
 	private SessionFactory sessionFactory;
@@ -20,8 +21,6 @@ public class DaoHelper {
 				.uniqueResult();
 	}
 
-
-	@Transactional
 	public Article insertArticleInDb(Article article) {
 		sessionFactory.getCurrentSession().save(article);
 		return article;			 
