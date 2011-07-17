@@ -65,7 +65,7 @@ public class ArticleControllerFunctionalTest {
     }
     
     @Test
-    public void getUnexistingArticleById() {
+    public void getArticleByIdShouldReturnArticleNotFound() {
 
     	// when
     	final String articleByIdUrl = BASEURL + "/-1";
