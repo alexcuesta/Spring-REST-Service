@@ -5,6 +5,8 @@ import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.fail;
+
 
 import java.util.List;
 
@@ -20,6 +22,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import uk.co.pc.domain.dao.helper.DaoHelper;
@@ -59,6 +62,22 @@ public class ArticleControllerFunctionalTest {
 
     	// then
     	assertThat(returnedArticle, is(articleInDb));
+    }
+    
+    @Test
+    public void getUnexistingArticleById() {
+
+    	// when
+    	final String articleByIdUrl = BASEURL + "/-1";
+    	
+    	try {
+        	restTemplate.getForObject(articleByIdUrl, Article.class);
+    		fail();
+    		
+    	} catch (HttpClientErrorException ex) {
+    		// then status code  should be 404
+    		assertThat(ex.getStatusCode(), is(HttpStatus.NOT_FOUND));
+    	}
     }
 
     @Test

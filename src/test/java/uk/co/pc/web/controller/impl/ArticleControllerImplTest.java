@@ -2,9 +2,9 @@ package uk.co.pc.web.controller.impl;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.sameInstance;
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.verify;
 
 import java.util.Arrays;
@@ -16,9 +16,11 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import uk.co.pc.domain.dao.exception.ArticleNotFoundException;
 import uk.co.pc.domain.model.Article;
 import uk.co.pc.service.ArticleService;
 import uk.co.pc.web.bean.ArticleList;
+import uk.co.pc.web.exception.ResourceNotFoundException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ArticleControllerImplTest {
@@ -62,6 +64,20 @@ public class ArticleControllerImplTest {
 		
 		// then 
 		assertThat(actualArticle, is(sameInstance(articleInDb)));
+	}
+	
+	@Test(expected=ResourceNotFoundException.class)
+	public void shouldThrowArticleNotFoundExceptionIfArticleNotFoundById() throws Exception {
+		// given an id
+		Long invalidId = -1L;
+		// and the service throws ArticleNotFoundException
+    	willThrow(new ArticleNotFoundException(invalidId.toString()))
+				 .given(articleService).findById(invalidId);
+    	
+		// when
+		controller.getArticleById(invalidId);
+		
+		// then the ArticleNotFoundException should be thrown
 	}
 	
 	@Test

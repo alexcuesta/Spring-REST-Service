@@ -1,12 +1,10 @@
 package uk.co.pc.web.controller.impl;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +17,7 @@ import uk.co.pc.domain.model.Article;
 import uk.co.pc.service.ArticleService;
 import uk.co.pc.web.bean.ArticleList;
 import uk.co.pc.web.controller.ArticleController;
+import uk.co.pc.web.exception.ResourceNotFoundException;
 
 /**
  * ArticleController.
@@ -60,14 +59,13 @@ public class ArticleControllerImpl implements ArticleController {
 
 	@Override
 	@RequestMapping("/article/{id}")
-	public Article getArticleById(@PathVariable Long id) {
+	public Article getArticleById(@PathVariable Long id) throws ResourceNotFoundException {
 		log.info("Getting article by id {}", id);
 		try {
 			return articleService.findById(id);
-			
-		} catch (ArticleNotFoundException e) {
-			// TODO Auto-generated catch block
-			return null;
+		} catch (ArticleNotFoundException ex) {
+			log.info("Article '{}' not found", id);
+			throw new ResourceNotFoundException();
 		}
 	}
 
