@@ -16,6 +16,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.LinkedMultiValueMap;
@@ -93,14 +95,16 @@ public class ArticleControllerFunctionalTest {
     	parameters.add("author", "Evans");
     	
     	// when
-    	Article returnedArticle = restTemplate.postForObject(BASEURL, parameters, Article.class);
+    	ResponseEntity<Article> response = restTemplate.postForEntity(BASEURL, parameters, Article.class);
     	
     	// then
+    	Article returnedArticle = response.getBody();
     	assertThat("id", returnedArticle.getId(), is(notNullValue()));
     	assertThat("title", returnedArticle.getTitle(), is("DDD"));
     	assertThat("author", returnedArticle.getAuthor(), is("Evans"));
-    	
+    	assertThat("status code", response.getStatusCode(), is(HttpStatus.CREATED));
     }
+    
     
     @Test
 	public void deleteArticle() throws Exception {
@@ -118,6 +122,7 @@ public class ArticleControllerFunctionalTest {
     	
 	}
     
+ 
     
     
     /* Spring Injected Values/Collaborators */
