@@ -1,8 +1,6 @@
 <!DOCTYPE project>
 <project name="tomcat" basedir=".">
 
-	  <property name="tomcat.home" value="/Users/alex/development/apache-tomcat-6.0.32" />
-
 	  <!-- Configure the context path for this application -->
 	  <property name="path"     value="/ROOT"/>
 
@@ -36,9 +34,6 @@
 	            path="${path}"/>
 	  </target>
 	
-	<target name="redeploy" depends="war,undeploy,deploy" description="Redeploys web application" />
-	
-   
 	<target name="tomcat-start">
 	    <java jar="${tomcat.home}/bin/bootstrap.jar" fork="true">
 	        <jvmarg value="-Dcatalina.home=${tomcat.home}"/>

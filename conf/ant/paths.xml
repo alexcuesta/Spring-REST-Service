@@ -14,6 +14,9 @@
     <property name="dist.tmp.dir" value="${tmp.dir}/dist" />
     <property name="build.tmp.dir" value="${tmp.dir}/build" />
     <property name="reports.tmp.dir" value="${tmp.dir}/reports" />
+	
+    <property name="tomcat.home" value="/Users/alex/development/apache-tomcat-6.0.32" />
+
 
     <path id="build.classpath">
         <fileset id="build.classpath.jars" dir="${libs.dir}">
