@@ -21,6 +21,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import uk.co.pc.domain.dao.ArticleDao;
+import uk.co.pc.domain.dao.exception.ArticleNotFoundException;
 import uk.co.pc.domain.dao.helper.DaoHelper;
 import uk.co.pc.domain.model.Article;
 import uk.co.pc.domain.model.ArticleBuilder;
@@ -69,7 +70,7 @@ public class ArticleDaoImplTest {
     }
 
 	@Test
-    public void findByIdShouldReturnAnArticle() {
+    public void findByIdShouldReturnAnArticle() throws ArticleNotFoundException {
 		// given an article in db
 		Article articleInDb = givenArticle.withTitle("Clean code")
 										  .withAuthor("Uncle Bob")
@@ -81,9 +82,17 @@ public class ArticleDaoImplTest {
 		assertThat(articleFound, is(articleInDb));
 	}
 
-    @Test
-    public void findByInvalidIdShouldNotReturnAnArticle() {
-        fail("tbd");
+    @Test(expected=ArticleNotFoundException.class)
+    public void findByInvalidIdShouldNotReturnAnArticle() throws ArticleNotFoundException {
+    	// given an invalid id
+    	Long invalidId = -1L;
+    	
+    	// when
+    	articleDao.findById(invalidId);
+    	
+    	// then an ArticleNotFoundException should be thrown
+    	// because we don't want to deal with null objects in our domain
+    	
     }
 
     @Test
@@ -92,18 +101,26 @@ public class ArticleDaoImplTest {
 		Article articleInDb = givenArticle.withTitle("Clean code")
 										  .withAuthor("Uncle Bob")
 										  .isInDatabase();
-		// when I find it by id
-		List<Article> foundArticle = articleDao.findByTitle("Clean code");
+		// when
+		List<Article> foundArticles = articleDao.findByTitle("Clean code");
 		
 		// then
 		List<Article> expectedArticles = Arrays.asList(articleInDb);
-		assertThat(foundArticle, is(expectedArticles));    
+		assertThat(foundArticles, is(expectedArticles));    
 	}
 
     @Test
-    public void findByInvalidTitleShouldNotReturnAnArticle() {
-        fail("tbd");
-    }
+    public void findByInvalidTitleShouldNotReturnAnArticle() throws ArticleNotFoundException {
+		// given an invalid title in db
+    	String invalidTitle = "invalid title";
+    	
+    	// when I find it by id
+    	List<Article>  foundArticles = articleDao.findByTitle(invalidTitle);
+		
+	   	// then 
+    	assertThat(foundArticles.isEmpty(), is(true));
+ 		   
+	}
 
     @Test
     public void findByAuthorShouldReturnAnArticle() {

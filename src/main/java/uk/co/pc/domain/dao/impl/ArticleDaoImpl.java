@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import uk.co.pc.domain.dao.ArticleDao;
+import uk.co.pc.domain.dao.exception.ArticleNotFoundException;
 import uk.co.pc.domain.model.Article;
 
 /**
@@ -44,11 +45,23 @@ public class ArticleDaoImpl implements ArticleDao {
 	}
 
 	@Override
-	public Article findById(Long id) {
-		return (Article) sessionFactory.getCurrentSession()
-				.createQuery("from Article where id=:id")
-				.setParameter("id", id)
-				.uniqueResult();
+	public Article findById(Long id) throws ArticleNotFoundException {
+		Article article = (Article) sessionFactory.getCurrentSession()
+										.createQuery("from Article where id=:id")
+										.setParameter("id", id)
+										.uniqueResult();
+		throwExceptionIfArticleNotFound(article, id.toString());
+		return article;
+	}
+
+	/*
+	 * I place private methods following  the step-down rule recommended by Uncle Bob
+	 * so reader don't have to jump around to read nested functions details
+	 */
+	private void throwExceptionIfArticleNotFound(Article article, String searchTerm) throws ArticleNotFoundException {
+		if (article == null) {
+			throw new ArticleNotFoundException(searchTerm);
+		}
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package uk.co.pc.service;
 
 import java.util.List;
 
+import uk.co.pc.domain.dao.exception.ArticleNotFoundException;
 import uk.co.pc.domain.model.Article;
 
 /**
@@ -29,8 +30,9 @@ public interface ArticleService {
      * 
      * @param id of the Article to search for.
      * @return Article or null if not found.
+     * @throws ArticleNotFoundException If article is not found
      */
-    Article findById(final Long id);
+    Article findById(final Long id) throws ArticleNotFoundException;
 
     /**
      * Find Articles by Title.

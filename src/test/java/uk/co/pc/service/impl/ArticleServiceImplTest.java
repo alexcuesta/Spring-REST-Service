@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.fail;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.verify;
 
 import java.util.Arrays;
@@ -17,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import uk.co.pc.domain.dao.ArticleDao;
+import uk.co.pc.domain.dao.exception.ArticleNotFoundException;
 import uk.co.pc.domain.model.Article;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -59,7 +61,7 @@ public class ArticleServiceImplTest {
     }
 
     @Test
-    public void findByIdShouldReturnAnArticle() {
+    public void findByIdShouldReturnAnArticle() throws ArticleNotFoundException {
     	// given an id
     	Long id = 1L;
     	// and dao successfully finds article by id
@@ -73,10 +75,13 @@ public class ArticleServiceImplTest {
     	assertThat(returnedArticle, is(sameInstance(articleReturnedByDao)));
     }
 
-    @Test(expected=InvalidIdException.class)
-    public void findByInvalidIdShouldNotReturnAnArticle() {
-        // given 
+    @Test(expected=ArticleNotFoundException.class)
+    public void findByInvalidIdShouldNotReturnAnArticle() throws ArticleNotFoundException {
+        // given an invalid id
     	Long invalidId = -1L;
+    	// and the dao throws an ArticleNotFoundException
+    	willThrow(new ArticleNotFoundException(invalidId.toString()))
+    		.given(articleDao).findById(invalidId);
     	
     	// when 
     	articleService.findById(invalidId);
@@ -97,11 +102,6 @@ public class ArticleServiceImplTest {
     	
     	// then
     	assertThat(actualArticles, is(articlesFound));
-    }
-
-    @Test
-    public void findByInvalidTitleShouldNotReturnAnArticle() {
-        fail("tbd");
     }
 
     @Test

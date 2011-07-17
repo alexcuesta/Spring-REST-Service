@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import uk.co.pc.domain.dao.ArticleDao;
+import uk.co.pc.domain.dao.exception.ArticleNotFoundException;
 import uk.co.pc.domain.model.Article;
 import uk.co.pc.service.ArticleService;
 
@@ -32,7 +33,7 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public Article findById(Long id) {
+	public Article findById(Long id) throws ArticleNotFoundException {
 		return articleDao.findById(id);
 	}
 
